@@ -1,21 +1,41 @@
-import { StyledList, StyledListHeader, StyledHeaderItem } from './style'
+import {
+  StyledListWrapper,
+  StyleListItemsWrapper,
+  StyledList,
+  StyledListHeader,
+  StyledHeaderItem
+} from './style'
 import { ComponentProps } from './types'
 
 import RepositoryListRow from './RepositoryListRow'
 
-const RepositoryList = ({ data }: ComponentProps) => {
+import Pagination from '../Pagination'
+
+const RepositoryList = ({
+  data,
+  headerLabels,
+  pageData,
+  handlePageChange
+}: ComponentProps) => {
+  const handleChange = (pageNumber: number) => {
+    handlePageChange(pageNumber)
+  }
   return (
-    <StyledList>
-      <StyledListHeader>
-        <StyledHeaderItem>Repository name</StyledHeaderItem>
-        <StyledHeaderItem>Numbers of stars</StyledHeaderItem>
-        <StyledHeaderItem>Numbers of forks</StyledHeaderItem>
-        <StyledHeaderItem>Owner</StyledHeaderItem>
-      </StyledListHeader>
-      {data?.map((repo) => (
-        <RepositoryListRow rowData={repo} key={repo.id} />
-      ))}
-    </StyledList>
+    <StyledListWrapper>
+      <StyledList>
+        <StyledListHeader>
+          {headerLabels.map((column) => (
+            <StyledHeaderItem key={column.id}>{column.label}</StyledHeaderItem>
+          ))}
+        </StyledListHeader>
+        <StyleListItemsWrapper>
+          {data?.map((repo) => (
+            <RepositoryListRow rowData={repo} key={repo.id} />
+          ))}
+        </StyleListItemsWrapper>
+      </StyledList>
+      <Pagination onChange={handleChange} pageData={pageData} />
+    </StyledListWrapper>
   )
 }
 

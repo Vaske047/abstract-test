@@ -22,4 +22,13 @@ export interface ListRowProps {
 
 export interface ComponentProps {
   data: ListDataProps[]
+  headerLabels: { id: number; label: string }[]
+  handlePageChange: (page: number) => void
+  pageData: {
+    count: number
+    currentPage: number
+    perPage: number
+    total: number
+    totalPages: number
+  }
 }

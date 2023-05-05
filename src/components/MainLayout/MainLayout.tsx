@@ -6,6 +6,8 @@ import { useThunk } from '../../hooks/use-thunk'
 
 import { StyledMainLayout, StyledSpinner } from './style'
 
+import { ParamsProps } from './types'
+
 import Sidebar from '../Sidebar'
 import RepositoryList from '../RepositoryList'
 
@@ -16,6 +18,13 @@ import LoadingSpinner from '../../icons/LoadingSpinner'
 
 const MainLayout = () => {
   const [activeTab, setActiveTab] = useState<string>('react')
+  const [params, setParams] = useState<ParamsProps>({
+    query: 'react',
+    sort: '',
+    order: '',
+    perPage: 10,
+    page: 1
+  })
   const [doFetchRepositories, isLoadingRepositories, loadingRepositoriesError] =
     useThunk(fetchRepositories)
 
@@ -24,9 +33,12 @@ const MainLayout = () => {
   })
 
   useEffect(() => {
-    if (typeof doFetchRepositories === 'function')
-      doFetchRepositories({ query: activeTab })
-  }, [doFetchRepositories, activeTab])
+    setParams({ ...params, query: activeTab })
+  }, [activeTab])
+
+  useEffect(() => {
+    if (typeof doFetchRepositories === 'function') doFetchRepositories(params)
+  }, [doFetchRepositories, params])
 
   const sidebarData = [
     {
@@ -49,8 +61,40 @@ const MainLayout = () => {
     }
   ]
 
+  const headerLabels = [
+    {
+      id: 1,
+      label: 'Repository Name'
+    },
+    {
+      id: 2,
+      label: 'Numbers of stars'
+    },
+    {
+      id: 3,
+      label: 'Numbers of forks'
+    },
+    {
+      id: 4,
+      label: 'Owner'
+    }
+  ]
+
+  const pageData = {
+    count: 15,
+    currentPage: params?.page || 1,
+    perPage: 10,
+    total: 1000,
+    totalPages: 100
+  }
+
   const handleActiveTab = (name: string) => {
     setActiveTab(name)
+  }
+
+  const handlePageChange = (page: number) => {
+    if (!params) return
+    setParams({ ...params, page })
   }
 
   return (
@@ -61,7 +105,12 @@ const MainLayout = () => {
           <LoadingSpinner />
         </StyledSpinner>
       ) : (
-        <RepositoryList data={data?.items} />
+        <RepositoryList
+          data={data?.items}
+          headerLabels={headerLabels}
+          handlePageChange={handlePageChange}
+          pageData={pageData}
+        />
       )}
     </StyledMainLayout>
   )

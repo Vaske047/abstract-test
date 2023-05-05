@@ -1,5 +1,15 @@
 import styled from 'styled-components'
 
+export const StyledListWrapper = styled.div`
+  width: 100%;
+`
+
+export const StyleListItemsWrapper = styled.div`
+  max-height: 70vh;
+  width: 100%;
+  overflow-y: scroll;
+`
+
 export const StyledList = styled.div`
   padding: 40px;
   flex-grow: 1;
