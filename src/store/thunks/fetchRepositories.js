@@ -9,7 +9,7 @@ const fetchRepositories = createAsyncThunk(
       {
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: 'Bearer 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'
+          Authorization: 'Bearer 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'
         },
         params: {
           q: params.query || '',
