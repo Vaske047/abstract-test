@@ -5,6 +5,7 @@ export const StyledSidebar = styled.div`
   min-height: 100vh;
   padding: 40px 20px;
   color: #707881;
+  box-sizing: border-box;
 `
 
 export const StyledItem = styled.div`

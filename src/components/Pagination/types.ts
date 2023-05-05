@@ -1,5 +1,4 @@
 export interface PageDataProps {
-  count: number
   currentPage: number
   perPage: number
   total: number

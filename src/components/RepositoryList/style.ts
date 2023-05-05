@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const StyledListWrapper = styled.div`
   width: 100%;
+  padding: 40px;
 `
 
 export const StyleListItemsWrapper = styled.div`
@@ -11,7 +12,6 @@ export const StyleListItemsWrapper = styled.div`
 `
 
 export const StyledList = styled.div`
-  padding: 40px;
   flex-grow: 1;
 `
 
@@ -40,4 +40,8 @@ export const StyledListRowItem = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+`
+export const StyledListNav = styled.div`
+  display: flex;
+  justify-content: space-between;
 `

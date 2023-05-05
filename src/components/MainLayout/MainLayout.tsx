@@ -11,10 +11,9 @@ import { ParamsProps } from './types'
 import Sidebar from '../Sidebar'
 import RepositoryList from '../RepositoryList'
 
-import React from '../../icons/React'
-import Vue from '../../icons/Vue'
-import Angular from '../../icons/Angular'
 import LoadingSpinner from '../../icons/LoadingSpinner'
+
+import { sidebarData, headerLabels } from './options'
 
 const MainLayout = () => {
   const [activeTab, setActiveTab] = useState<string>('react')
@@ -40,50 +39,15 @@ const MainLayout = () => {
     if (typeof doFetchRepositories === 'function') doFetchRepositories(params)
   }, [doFetchRepositories, params])
 
-  const sidebarData = [
-    {
-      id: 1,
-      label: 'React',
-      icon: <React />,
-      payload: 'react'
-    },
-    {
-      id: 2,
-      label: 'Vue',
-      icon: <Vue />,
-      payload: 'vue'
-    },
-    {
-      id: 3,
-      label: 'Angular',
-      icon: <Angular />,
-      payload: 'angular'
-    }
-  ]
-
-  const headerLabels = [
-    {
-      id: 1,
-      label: 'Repository Name'
-    },
-    {
-      id: 2,
-      label: 'Numbers of stars'
-    },
-    {
-      id: 3,
-      label: 'Numbers of forks'
-    },
-    {
-      id: 4,
-      label: 'Owner'
-    }
-  ]
-
   const pageData = {
-    count: 15,
     currentPage: params?.page || 1,
-    perPage: 10,
+    perPage: params?.perPage || 10,
+    sortAndOrder: `${params?.sort} ${params?.order}`,
+    // ztotal: data.total_count > 1000 ? 1000 : data.total_count,
+    // totalPages:
+    //   data.total_count > 1000
+    //     ? 100 / params?.perPage
+    //     : data.total_count / params?.perPage
     total: 1000,
     totalPages: 100
   }
@@ -93,8 +57,16 @@ const MainLayout = () => {
   }
 
   const handlePageChange = (page: number) => {
-    if (!params) return
     setParams({ ...params, page })
+  }
+
+  const handlePerPage = (perPage: number) => {
+    setParams({ ...params, perPage })
+  }
+
+  const handleSort = (sort: string) => {
+    const sortArr = sort.split(' ')
+    setParams({ ...params, sort: sortArr[0], order: sortArr[1] })
   }
 
   return (
@@ -110,6 +82,8 @@ const MainLayout = () => {
           headerLabels={headerLabels}
           handlePageChange={handlePageChange}
           pageData={pageData}
+          handlePerPage={handlePerPage}
+          handleSort={handleSort}
         />
       )}
     </StyledMainLayout>
