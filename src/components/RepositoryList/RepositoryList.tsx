@@ -1,5 +1,7 @@
+import { StyledList } from './style'
+
 const RepositoryList = () => {
-  return <div>Repository List</div>
+  return <StyledList>Repository List</StyledList>
 }
 
 export default RepositoryList

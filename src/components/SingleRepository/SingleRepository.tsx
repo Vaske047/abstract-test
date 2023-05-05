@@ -1,5 +1,6 @@
+import { StyledSingleRepository } from './style'
 const SingleRepository = () => {
-  return <div>Single Repository</div>
+  return <StyledSingleRepository>Single Repository</StyledSingleRepository>
 }
 
 export default SingleRepository
