@@ -1,7 +1,17 @@
 import styled from 'styled-components'
 
-export const StyledList = styled.div`
+export const StyledListWrapper = styled.div`
+  width: 100%;
   padding: 40px;
+`
+
+export const StyleListItemsWrapper = styled.div`
+  max-height: 70vh;
+  width: 100%;
+  overflow-y: scroll;
+`
+
+export const StyledList = styled.div`
   flex-grow: 1;
 `
 
@@ -30,4 +40,8 @@ export const StyledListRowItem = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+`
+export const StyledListNav = styled.div`
+  display: flex;
+  justify-content: space-between;
 `

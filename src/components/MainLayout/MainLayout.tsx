@@ -6,16 +6,24 @@ import { useThunk } from '../../hooks/use-thunk'
 
 import { StyledMainLayout, StyledSpinner } from './style'
 
+import { ParamsProps } from './types'
+
 import Sidebar from '../Sidebar'
 import RepositoryList from '../RepositoryList'
 
-import React from '../../icons/React'
-import Vue from '../../icons/Vue'
-import Angular from '../../icons/Angular'
 import LoadingSpinner from '../../icons/LoadingSpinner'
+
+import { sidebarData, headerLabels } from './options'
 
 const MainLayout = () => {
   const [activeTab, setActiveTab] = useState<string>('react')
+  const [params, setParams] = useState<ParamsProps>({
+    query: 'react',
+    sort: '',
+    order: '',
+    perPage: 10,
+    page: 1
+  })
   const [doFetchRepositories, isLoadingRepositories, loadingRepositoriesError] =
     useThunk(fetchRepositories)
 
@@ -24,33 +32,41 @@ const MainLayout = () => {
   })
 
   useEffect(() => {
-    if (typeof doFetchRepositories === 'function')
-      doFetchRepositories({ query: activeTab })
-  }, [doFetchRepositories, activeTab])
+    setParams({ ...params, query: activeTab })
+  }, [activeTab])
 
-  const sidebarData = [
-    {
-      id: 1,
-      label: 'React',
-      icon: <React />,
-      payload: 'react'
-    },
-    {
-      id: 2,
-      label: 'Vue',
-      icon: <Vue />,
-      payload: 'vue'
-    },
-    {
-      id: 3,
-      label: 'Angular',
-      icon: <Angular />,
-      payload: 'angular'
-    }
-  ]
+  useEffect(() => {
+    if (typeof doFetchRepositories === 'function') doFetchRepositories(params)
+  }, [doFetchRepositories, params])
+
+  const pageData = {
+    currentPage: params?.page || 1,
+    perPage: params?.perPage || 10,
+    sortAndOrder: `${params?.sort} ${params?.order}`,
+    // ztotal: data.total_count > 1000 ? 1000 : data.total_count,
+    // totalPages:
+    //   data.total_count > 1000
+    //     ? 100 / params?.perPage
+    //     : data.total_count / params?.perPage
+    total: 1000,
+    totalPages: 100
+  }
 
   const handleActiveTab = (name: string) => {
     setActiveTab(name)
+  }
+
+  const handlePageChange = (page: number) => {
+    setParams({ ...params, page })
+  }
+
+  const handlePerPage = (perPage: number) => {
+    setParams({ ...params, perPage })
+  }
+
+  const handleSort = (sort: string) => {
+    const sortArr = sort.split(' ')
+    setParams({ ...params, sort: sortArr[0], order: sortArr[1] })
   }
 
   return (
@@ -61,7 +77,14 @@ const MainLayout = () => {
           <LoadingSpinner />
         </StyledSpinner>
       ) : (
-        <RepositoryList data={data?.items} />
+        <RepositoryList
+          data={data?.items}
+          headerLabels={headerLabels}
+          handlePageChange={handlePageChange}
+          pageData={pageData}
+          handlePerPage={handlePerPage}
+          handleSort={handleSort}
+        />
       )}
     </StyledMainLayout>
   )
