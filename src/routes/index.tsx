@@ -1,7 +1,7 @@
 import { Suspense, Profiler } from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
-import RepositoryList from '../components/RepositoryList'
+import MainLayout from '../components/MainLayout'
 import SingleRepository from '../components/SingleRepository'
 
 const AppRouter = () => (
@@ -9,7 +9,7 @@ const AppRouter = () => (
     <Profiler id='app' onRender={() => {}}>
       <Suspense fallback={null}>
         <Routes>
-          <Route path='/' element={<RepositoryList />} />
+          <Route path='/' element={<MainLayout />} />
           <Route path='/single-repository' element={<SingleRepository />} />
         </Routes>
       </Suspense>
