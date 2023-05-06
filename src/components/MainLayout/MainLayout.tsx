@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { fetchRepositories } from '../../store'
 import { useThunk } from '../../hooks/use-thunk'
 
-import { StyledMainLayout, StyledSpinner } from './style'
+import { StyledMainLayout, StyledSpinner, StyledError } from './style'
 
 import { PageDataProps, ParamsProps } from './types'
 
@@ -32,7 +32,7 @@ const MainLayout = () => {
     total: 1000,
     totalPages: 100
   })
-  const [doFetchRepositories, isLoadingRepositories] =
+  const [doFetchRepositories, isLoadingRepositories, isRepositoriesError] =
     useThunk(fetchRepositories)
 
   const { data } = useSelector((state: any) => {
@@ -94,6 +94,8 @@ const MainLayout = () => {
         <StyledSpinner>
           <LoadingSpinner />
         </StyledSpinner>
+      ) : isRepositoriesError ? (
+        <StyledError>Loading Error</StyledError>
       ) : (
         <RepositoryList
           data={data?.items}

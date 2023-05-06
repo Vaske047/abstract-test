@@ -10,3 +10,8 @@ export const StyledSpinner = styled.div`
   justify-content: center;
   align-items: center;
 `
+export const StyledError = styled.h4`
+  text-align: center;
+  width: 100%;
+  color: #ef5350;
+`
