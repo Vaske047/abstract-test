@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
@@ -6,8 +6,14 @@ import { Link } from 'react-router-dom'
 
 import { useLocation } from 'react-router-dom'
 
-import { fetchSingleRepository } from '../../store'
+import {
+  fetchSingleRepository,
+  fetchLanguages,
+  fetchContributors
+} from '../../store'
 import { useThunk } from '../../hooks/use-thunk'
+
+import LoadingSpinner from '../../icons/LoadingSpinner'
 
 import {
   StyledSingleRepository,
@@ -15,67 +21,110 @@ import {
   StyledImgHolder,
   StyledInfo,
   StyledBackButton,
-  StyledRepoNav
+  StyledRepoNav,
+  StyledSpinner,
+  StyledRepoNavItem
 } from './style'
+
+import CustomList from './CustomList'
+import ArrowLeft from '../../icons/ArrowLeft'
+
 const SingleRepository = () => {
+  const [activeTab, setActiveTab] = useState<string>('contributors')
   const location = useLocation()
 
-  const [
-    doFetchSingleRepository,
-    isLoadingRepositories,
-    loadingRepositoriesError
-  ] = useThunk(fetchSingleRepository)
+  const [doFetchSingleRepository, isLoadingSingleRepository] = useThunk(
+    fetchSingleRepository
+  )
 
-  const { data } = useSelector((state: any) => {
-    return state.singleRepository
-  })
+  const [doFetchLanguages] = useThunk(fetchLanguages)
+
+  const [doFetchContributors] = useThunk(fetchContributors)
+
+  const repository = useSelector((state: any) => state.singleRepository).data
+  const languages = useSelector((state: any) => state.languages).data
+  const contributors = useSelector((state: any) => state.contributors).data
 
   useEffect(() => {
-    console.log(location.state)
-    if (typeof doFetchSingleRepository === 'function')
+    if (typeof doFetchSingleRepository === 'function') {
       doFetchSingleRepository({
         owner: location.state.owner,
         name: location.state.name
       })
-  }, [doFetchSingleRepository])
+    }
+  }, [doFetchSingleRepository, location.state.owner, location.state.name])
+
+  useEffect(() => {
+    if (
+      typeof doFetchLanguages === 'function' &&
+      repository &&
+      !isLoadingSingleRepository
+    ) {
+      doFetchLanguages({ link: repository.languages_url })
+    }
+  }, [doFetchLanguages, repository, isLoadingSingleRepository])
+
+  useEffect(() => {
+    if (
+      typeof doFetchContributors === 'function' &&
+      repository &&
+      !isLoadingSingleRepository
+    ) {
+      doFetchContributors({ link: repository.contributors_url })
+    }
+  }, [doFetchContributors, repository, isLoadingSingleRepository])
 
   return (
     <StyledSingleRepository>
-      <StyledBackButton>
-        <Link to='/'>Back to repositories</Link>
-      </StyledBackButton>
-      <StyledRepoHeader>
-        <StyledImgHolder>
-          <img src={data?.owner?.avatar_url} alt='avatar' />
-          <p>{data?.owner?.login}</p>
-        </StyledImgHolder>
-        <StyledInfo>
-          <h4>{data?.name}</h4>
-          <ul>
-            {data?.license && <li>{data?.license?.name}</li>}
-            <li>{data?.stargazers_count} stars</li>
-            <li>{data?.forks_count} forks</li>
-            <li>{data?.open_issues_count} open issues</li>
-          </ul>
-        </StyledInfo>
-      </StyledRepoHeader>
-      <StyledRepoNav>
-        <li>Contributor</li>
-        <li>Programming languages</li>
-      </StyledRepoNav>
-      {/* <p>contributors_url</p>
-      <p>languages_url</p> */}
+      {isLoadingSingleRepository ? (
+        <StyledSpinner>
+          <LoadingSpinner />
+        </StyledSpinner>
+      ) : (
+        <>
+          <StyledBackButton>
+            <Link to='/'>
+              <ArrowLeft />
+              Back to repositories
+            </Link>
+          </StyledBackButton>
+          <StyledRepoHeader>
+            <StyledImgHolder>
+              <img src={repository?.owner?.avatar_url} alt='avatar' />
+              <p>{repository?.owner?.login}</p>
+            </StyledImgHolder>
+            <StyledInfo>
+              <h4>{repository?.name}</h4>
+              <ul>
+                {repository?.license && <li>{repository?.license?.name}</li>}
+                <li>{repository?.stargazers_count} stars</li>
+                <li>{repository?.forks_count} forks</li>
+                <li>{repository?.open_issues_count} open issues</li>
+              </ul>
+            </StyledInfo>
+          </StyledRepoHeader>
+          <StyledRepoNav>
+            <StyledRepoNavItem
+              onClick={() => setActiveTab('contributors')}
+              isActive={activeTab === 'contributors'}
+            >
+              Contributors
+            </StyledRepoNavItem>
+            <StyledRepoNavItem
+              onClick={() => setActiveTab('languages')}
+              isActive={activeTab === 'languages'}
+            >
+              Programming languages
+            </StyledRepoNavItem>
+          </StyledRepoNav>
+          <CustomList
+            activeList={activeTab}
+            data={activeTab === 'contributors' ? contributors : languages}
+          />
+        </>
+      )}
     </StyledSingleRepository>
   )
 }
-// ● Repository name
-// ● Number of stars
-// ● Number of forks
-// ● Owner’s name
-// ● Owner’s avatar
-// ● Number of open issues
-// ● Contributor list (display first 10)
-// ● List of applied programming languages
-// ● ... any other information you find useful
 
 export default SingleRepository
