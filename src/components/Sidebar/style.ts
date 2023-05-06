@@ -1,13 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { SidebarItemProps } from './types'
 
 export const StyledSidebar = styled.div`
   background-color: #f2f2f2;
   min-height: 100vh;
   padding: 40px 20px;
   color: #707881;
+  box-sizing: border-box;
 `
 
-export const StyledItem = styled.div`
+export const StyledItem = styled.div<SidebarItemProps>`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -19,4 +21,10 @@ export const StyledItem = styled.div`
     color: #081159;
     background-color: #fff;
   }
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      color: #081159;
+      background-color: #fff;
+    `};
 `
