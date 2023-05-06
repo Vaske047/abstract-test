@@ -6,7 +6,7 @@ const Sidebar = ({ data, handleActiveTab, activeTab }: ComponentProps) => {
     handleActiveTab(name)
   }
   return (
-    <StyledSidebar>
+    <StyledSidebar data-testid='sidebar'>
       {data.map((topic) => (
         <StyledItem
           key={topic.id}
