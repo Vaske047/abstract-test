@@ -20,6 +20,7 @@ export const StyledImgHolder = styled.div`
   img {
     max-width: 180px;
     border-radius: 50%;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   }
   p {
     margin: 20px 0 0;
