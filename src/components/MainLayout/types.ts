@@ -5,3 +5,11 @@ export interface ParamsProps {
   perPage: number
   page: number
 }
+
+export interface PageDataProps {
+  currentPage: number
+  perPage: number
+  sortAndOrder: string
+  total: number
+  totalPages: number
+}

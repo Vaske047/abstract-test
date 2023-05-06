@@ -6,7 +6,7 @@ import { useThunk } from '../../hooks/use-thunk'
 
 import { StyledMainLayout, StyledSpinner } from './style'
 
-import { ParamsProps } from './types'
+import { PageDataProps, ParamsProps } from './types'
 
 import Sidebar from '../Sidebar'
 import RepositoryList from '../RepositoryList'
@@ -18,13 +18,21 @@ import { sidebarData, headerLabels } from './options'
 const MainLayout = () => {
   const [activeTab, setActiveTab] = useState<string>('react')
   const [params, setParams] = useState<ParamsProps>({
-    query: 'react',
+    query: '',
     sort: '',
     order: '',
     perPage: 10,
     page: 1
   })
-  const [doFetchRepositories, isLoadingRepositories, loadingRepositoriesError] =
+
+  const [pageData, setPageData] = useState<PageDataProps>({
+    currentPage: 1,
+    perPage: 10,
+    sortAndOrder: 'stars desc',
+    total: 1000,
+    totalPages: 100
+  })
+  const [doFetchRepositories, isLoadingRepositories] =
     useThunk(fetchRepositories)
 
   const { data } = useSelector((state: any) => {
@@ -36,21 +44,24 @@ const MainLayout = () => {
   }, [activeTab])
 
   useEffect(() => {
-    if (typeof doFetchRepositories === 'function') doFetchRepositories(params)
+    if (!params?.query) {
+      setParams({ ...params, query: 'react' })
+    }
+    if (typeof doFetchRepositories === 'function' && params?.query)
+      doFetchRepositories(params)
   }, [doFetchRepositories, params])
 
-  const pageData = {
-    currentPage: params?.page || 1,
-    perPage: params?.perPage || 10,
-    sortAndOrder: `${params?.sort} ${params?.order}`,
-    // ztotal: data.total_count > 1000 ? 1000 : data.total_count,
-    // totalPages:
-    //   data.total_count > 1000
-    //     ? 100 / params?.perPage
-    //     : data.total_count / params?.perPage
-    total: 1000,
-    totalPages: 100
-  }
+  useEffect(() => {
+    const totalCount = data?.total_count > 1000 ? 1000 : data?.total_count
+    if (!totalCount) {
+      return
+    }
+    setPageData({
+      ...pageData,
+      total: data?.total_count > 1000 ? 1000 : data?.total_count,
+      totalPages: totalCount / params?.perPage
+    })
+  }, [doFetchRepositories])
 
   const handleActiveTab = (name: string) => {
     setActiveTab(name)
@@ -58,20 +69,27 @@ const MainLayout = () => {
 
   const handlePageChange = (page: number) => {
     setParams({ ...params, page })
+    setPageData({ ...pageData, currentPage: page })
   }
 
   const handlePerPage = (perPage: number) => {
     setParams({ ...params, perPage })
+    setPageData({ ...pageData, perPage })
   }
 
   const handleSort = (sort: string) => {
     const sortArr = sort.split(' ')
     setParams({ ...params, sort: sortArr[0], order: sortArr[1] })
+    setPageData({ ...pageData, sortAndOrder: sortArr.join(' ') })
   }
 
   return (
     <StyledMainLayout>
-      <Sidebar data={sidebarData} handleActiveTab={handleActiveTab} />
+      <Sidebar
+        data={sidebarData}
+        handleActiveTab={handleActiveTab}
+        activeTab={activeTab}
+      />
       {isLoadingRepositories ? (
         <StyledSpinner>
           <LoadingSpinner />

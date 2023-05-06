@@ -5,7 +5,12 @@ export interface SidebarDataProps {
   payload: string
 }
 
+export interface SidebarItemProps {
+  isActive: boolean
+}
+
 export interface ComponentProps {
   data: SidebarDataProps[]
   handleActiveTab: (name: any) => void
+  activeTab: string
 }
