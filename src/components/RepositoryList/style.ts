@@ -28,9 +28,15 @@ export const StyledHeaderItem = styled.div`
 
 export const StyledListRow = styled.div`
   display: flex;
+  transition: all ease 0.3s;
+  border-radius: 6px;
   img {
     width: 40px;
     border-radius: 50%;
+  }
+  &:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
   }
 `
 
