@@ -18,7 +18,8 @@ export const StyledList = styled.div`
 
 export const StyledListHeader = styled.div`
   display: flex;
-  background-color: #f7f7f7;
+  background-color: #081159;
+  color: #fff;
   border-radius: 6px;
 `
 
@@ -47,6 +48,8 @@ export const StyledListRowItem = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 60px;
+  box-sizing: border-box;
 `
 export const StyledListNav = styled.div`
   display: flex;
