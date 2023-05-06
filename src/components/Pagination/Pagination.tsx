@@ -69,10 +69,10 @@ const Pagination = ({
 
   return (
     <StyledPagination data-cy={cyLabel} {...props}>
-      <StyledButton onClick={handlePageClick(1)}>
+      <StyledButton onClick={handlePageClick(1)} aria-label='first'>
         <DoubleArrowLeft />
       </StyledButton>
-      <StyledButton onClick={onPreviousClick}>
+      <StyledButton onClick={onPreviousClick} aria-label='prev'>
         <ArrowLeft />
       </StyledButton>
       <StyledPagesList>
@@ -91,10 +91,13 @@ const Pagination = ({
           )
         })}
       </StyledPagesList>
-      <StyledButton onClick={onNextClick}>
+      <StyledButton onClick={onNextClick} aria-label='next'>
         <ArrowRight />
       </StyledButton>
-      <StyledButton onClick={handlePageClick(pageData.totalPages)}>
+      <StyledButton
+        onClick={handlePageClick(pageData.totalPages)}
+        aria-label='last'
+      >
         <DoubleArrowRight />
       </StyledButton>
     </StyledPagination>
