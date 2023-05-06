@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { ListItemProps } from './types'
 
 export const StyledSingleRepository = styled.div`
   max-width: 60vw;
@@ -12,13 +13,12 @@ export const StyledRepoHeader = styled.div`
   margin-top: 40px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 40px;
+  gap: 60px;
 `
 
 export const StyledImgHolder = styled.div`
   img {
-    max-width: 200px;
+    max-width: 180px;
     border-radius: 50%;
   }
   p {
@@ -60,6 +60,12 @@ export const StyledBackButton = styled.div`
     text-decoration: none;
     border-radius: 6px;
   }
+  svg {
+    margin-right: 10px;
+    path {
+      fill: #fff;
+    }
+  }
 `
 export const StyledRepoNav = styled.ul`
   margin-top: 40px;
@@ -69,15 +75,42 @@ export const StyledRepoNav = styled.ul`
   padding: 10px 0;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
-  li {
-    paddiing: 10px;
-    text-align: center;
-    padding: 20px;
-    cursor: pointer;
-    color: #a1a1a1;
-    &:hover {
+`
+
+export const StyledRepoNavItem = styled.li<ListItemProps>`
+  paddiing: 10px;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  color: #a1a1a1;
+  &:hover {
+    box-shadow: inset 0 -2px 0 0 #081159;
+    color: #081159;
+  }
+  ${({ isActive }) =>
+    isActive &&
+    css`
       box-shadow: inset 0 -2px 0 0 #081159;
       color: #081159;
-    }
+    `};
+`
+export const StyledSpinner = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+export const StyledCustomList = styled.div`
+  height: 30vh;
+  overflow-y: scroll;
+`
+export const StyledCustomListItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 5px 20px;
+  img {
+    width: 40px;
+    border-radius: 50%;
   }
 `

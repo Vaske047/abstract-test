@@ -13,6 +13,7 @@ export const StyleListItemsWrapper = styled.div`
 
 export const StyledList = styled.div`
   flex-grow: 1;
+  margin-bottom: 40px;
 `
 
 export const StyledListHeader = styled.div`
