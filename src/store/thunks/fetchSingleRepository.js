@@ -8,8 +8,7 @@ const fetchSingleRepository = createAsyncThunk(
       `https://api.github.com/repos/${params.owner}/${params.name}`,
       {
         headers: {
-          'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: 'Bearer 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'
+          'X-GitHub-Api-Version': '2022-11-28'
         }
       }
     )

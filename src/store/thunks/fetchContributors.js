@@ -6,8 +6,7 @@ const fetchContributors = createAsyncThunk(
   async (payload) => {
     const response = await axios.get(payload.link, {
       headers: {
-        'X-GitHub-Api-Version': '2022-11-28',
-        Authorization: 'Bearer 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'
+        'X-GitHub-Api-Version': '2022-11-28'
       }
     })
 
